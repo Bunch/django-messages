@@ -7,19 +7,18 @@ from django import forms
 from django.forms import widgets
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.utils.html import conditional_escape
+from django.utils.safestring import mark_safe
+from django.utils.encoding import force_unicode
 
+class CommaSeparatedUserInput(widgets.HiddenInput):
 
-class CommaSeparatedUserInput(widgets.Input):
-    input_type = 'text'
-    
     def render(self, name, value, attrs=None):
         if value is None:
             value = ''
         elif isinstance(value, (list, tuple)):
-            value = (', '.join([user.username for user in value]))
+            value = (', '.join([str(user.pk) for user in value]))
         return super(CommaSeparatedUserInput, self).render(name, value, attrs)
-        
-
 
 class CommaSeparatedUserField(forms.Field):
     widget = CommaSeparatedUserInput
@@ -36,10 +35,10 @@ class CommaSeparatedUserField(forms.Field):
         if isinstance(value, (list, tuple)):
             return value
         
-        names = set(value.split(','))
-        names_set = set([name.strip() for name in names if name.strip()])
-        users = list(User.objects.filter(username__in=names_set))
-        unknown_names = names_set ^ set([user.username for user in users])
+        ids = set(value.split(','))
+        ids_set = set([uid.strip() for uid in ids if uid.strip()])
+        users = list(User.objects.filter(pk__in=ids_set))
+        unknown_ids = ids_set ^ set([str(user.pk) for user in users])
         
         recipient_filter = self._recipient_filter
         invalid_users = []
@@ -47,11 +46,23 @@ class CommaSeparatedUserField(forms.Field):
             for r in users:
                 if recipient_filter(r) is False:
                     users.remove(r)
-                    invalid_users.append(r.username)
+                    invalid_users.append(r.gk)
         
-        if unknown_names or invalid_users:
-            raise forms.ValidationError(_(u"The following usernames are incorrect: %(users)s") % {'users': ', '.join(list(unknown_names)+invalid_users)})
+        if unknown_ids or invalid_users:
+            incorrect = [str(uid) for uid in list(unknown_ids)+invalid_users]
+            raise forms.ValidationError(u"The following user IDs are incorrect: %(users)s" % {'users': ', '.join(incorrect)})
         
         return users
 
+class PlainTextWidget(widgets.HiddenInput):
+    is_hidden = False
 
+    def render(self, name, value, attrs=None):
+        if value is None:
+            value = ''
+        value = conditional_escape(force_unicode(value))
+        return mark_safe(u'<p>%s</p>' % value)+super(PlainTextWidget, self).render(name, value, attrs)
+
+class ReadOnlyField(forms.Field):
+    required = False
+    widget = PlainTextWidget

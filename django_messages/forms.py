@@ -11,13 +11,14 @@ else:
     notification = None
 
 from django_messages.models import Message
-from django_messages.fields import CommaSeparatedUserField
+from django_messages.fields import CommaSeparatedUserField, ReadOnlyField
 
 class ComposeForm(forms.Form):
     """
     A simple default form for private messages.
     """
-    recipient = CommaSeparatedUserField(label=_(u"Recipient"))
+    to = ReadOnlyField(label=_(u"To"))
+    recipient = CommaSeparatedUserField(label=_(u"User ID"))
     subject = forms.CharField(label=_(u"Subject"))
     body = forms.CharField(label=_(u"Body"),
         widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
