@@ -18,7 +18,7 @@
                 {% if message.replied %}</em>{% endif %}
             {% if message.new %}</strong><span class="label success">New</span>{% endif %}</td>
         <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-        <td><a href="{% url messages_delete message.id %}" class="btn danger">{% trans "Delete" %}</a></td>
+        <td><a href="{% url messages_delete message.id %}" class="delete">{% trans "Delete" %}</a></td>
     </tr>
 {% endfor %}
     </tbody>
@@ -26,4 +26,7 @@
 {% else %}
 <p>{% trans "No messages." %}</p>
 {% endif %}  
+<div class="alert-message">
+    <a href="{% url matches %}">View your matches</a> to send a message.
+</div>
 {% endblock %}

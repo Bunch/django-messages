@@ -17,5 +17,6 @@
 {% ifequal message.recipient.pk user.pk %}
 <a href="{% url messages_reply message.id %}" class="btn primary">{% trans "Reply" %}</a>
 {% endifequal %}
+<a href="{% url messages_inbox %}" class="btn">{% trans "Back to messages" %}</a>
 <a href="{% url messages_delete message.id %}" class="btn">{% trans "Delete" %}</a>
 {% endblock %}

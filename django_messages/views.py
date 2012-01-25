@@ -89,11 +89,11 @@ def compose(request, recipient=None, form_class=ComposeForm,
         if recipient is not None:
             recipients = [u for u in User.objects.filter(pk__in=[r.strip() for r in recipient.split('+')])]
             form.fields['recipient'].initial = recipients
-            form.fields['to'].initial = mark_safe('<br>'.join([u.profile.signature for u in recipients]))
 
         if not recipients:
             raise Http404
 
+    form.fields['to'].initial = mark_safe('<br>'.join([u.profile.signature for u in recipients]))
     return render_to_response(template_name, {
         'form': form,
     }, context_instance=RequestContext(request))
@@ -123,14 +123,14 @@ def reply(request, message_id, form_class=ComposeForm,
             if success_url is None:
                 success_url = reverse('messages_inbox')
             return HttpResponseRedirect(success_url)
+
     else:
         form = form_class(initial={
-            'body': quote_helper(parent.sender, parent.body),
             'subject': _(u"Re: %(subject)s") % {'subject': parent.subject},
             'recipient': [parent.sender,]
             })
-        form.fields['to'].initial = parent.sender.profile.signature
 
+    form.fields['to'].initial = parent.sender.profile.signature
     return render_to_response(template_name, {
         'form': form,
     }, context_instance=RequestContext(request))

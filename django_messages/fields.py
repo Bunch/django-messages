@@ -61,7 +61,7 @@ class PlainTextWidget(widgets.HiddenInput):
         if value is None:
             value = ''
         value = conditional_escape(force_unicode(value))
-        return mark_safe(u'<p>%s</p>' % value)+super(PlainTextWidget, self).render(name, value, attrs)
+        return mark_safe(u'<p>%s</p>' % value)
 
 class PlainHTMLWidget(widgets.HiddenInput):
     is_hidden = False
@@ -72,5 +72,11 @@ class PlainHTMLWidget(widgets.HiddenInput):
         return conditional_escape(force_unicode(value))
 
 class ReadOnlyField(forms.Field):
-    required = False
     widget = PlainHTMLWidget
+
+    def __init__(self, *args, **kwargs):
+        kwargs['required'] = False
+        return super(ReadOnlyField, self).__init__(*args, **kwargs)
+
+    def bound_data(self, value, initial):
+        return initial

@@ -20,7 +20,7 @@ class ComposeForm(forms.Form):
     to = ReadOnlyField(label=_(u"To"))
     recipient = CommaSeparatedUserField(label=_(u"User ID"))
     subject = forms.CharField(label=_(u"Subject"))
-    body = forms.CharField(label=_(u"Body"),
+    body = forms.CharField(label=_(u"Message"),
         widget=forms.Textarea(attrs={'rows': '12', 'cols':'55'}))
     
         
