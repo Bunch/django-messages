@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}  
 {% block bodyclass %}about{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/django_messages/styles.css" type="text/css">
+{% endblock %}
 {% block content %}  
 {% endblock %}
 {% block sidebar %}

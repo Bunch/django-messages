@@ -4,18 +4,18 @@
 <h1>{% trans "View Message" %}</h1>
 <dl class="message-headers">
     <dt>{% trans "Subject" %}</dt>
-    <dd><strong>{{ message.subject }}</strong></dd>
+    <dd><strong>{{ message.subject }}</strong><span class="date">{{ message.sent_at|date:_("DATETIME_FORMAT")}}</span></dd>
     <dt>{% trans "Sender" %}</dt>
     <dd>{{ message.sender.profile.signature }}</dd>
-    <dt>{% trans "Date" %} </dt>
-    <dd>{{ message.sent_at|date:_("DATETIME_FORMAT")}}</dd>
     <dt>{% trans "Recipient" %}</dt>
     <dd>{{ message.recipient.profile.signature }}</dd>
 </dl>
-{{ message.body|linebreaksbr }}<br /><br />
+<p class="message">
+{{ message.body|linebreaksbr }}
+</p>
 
 {% ifequal message.recipient.pk user.pk %}
-<a href="{% url messages_reply message.id %}">{% trans "Reply" %}</a>
+<a href="{% url messages_reply message.id %}" class="btn primary">{% trans "Reply" %}</a>
 {% endifequal %}
-<a href="{% url messages_delete message.id %}">{% trans "Delete" %}</a>
+<a href="{% url messages_delete message.id %}" class="btn">{% trans "Delete" %}</a>
 {% endblock %}

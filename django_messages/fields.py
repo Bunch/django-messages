@@ -63,6 +63,14 @@ class PlainTextWidget(widgets.HiddenInput):
         value = conditional_escape(force_unicode(value))
         return mark_safe(u'<p>%s</p>' % value)+super(PlainTextWidget, self).render(name, value, attrs)
 
+class PlainHTMLWidget(widgets.HiddenInput):
+    is_hidden = False
+
+    def render(self, name, value, attrs=None):
+        if value is None:
+            value = ''
+        return conditional_escape(force_unicode(value))
+
 class ReadOnlyField(forms.Field):
     required = False
-    widget = PlainTextWidget
+    widget = PlainHTMLWidget
