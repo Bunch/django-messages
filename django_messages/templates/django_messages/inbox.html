@@ -10,7 +10,7 @@
     <tbody>
 {% for message in message_list %} 
     <tr>
-        <td>{{ message.sender.first_name }}</td>
+        <td>{{ message.sender.profile.signature }}</td>
         <td>
             {% if message.new %}<strong>{% endif %}
             {% if message.replied %}<em>{% endif %}
