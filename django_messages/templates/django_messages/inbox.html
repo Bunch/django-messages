@@ -23,10 +23,14 @@
 {% endfor %}
     </tbody>
 </table>
-{% else %}
-<p>{% trans "No messages." %}</p>
 {% endif %}  
-<div class="alert-message">
-    <a href="{% url matches %}">View your matches</a> to send a message.
+<div class="alert-message block-message">
+  {% if not message_list %} 
+    <strong>{% trans "You currently have no messages in your inbox." %}</strong>
+  {% endif %}
+  View a person's profile to send them message.
+  <div class="alert-actions">
+    <a href="{% url matches %}" class="btn large">Start with viewing your matches</a>
+  </div>
 </div>
 {% endblock %}

@@ -1,10 +1,8 @@
-.messages td { padding:5px }
-p.message { font-size:16px; color:#333; line-height:1.5em; padding:20px; margin:20px 0; clear:both; border:2px solid #DDD; background:#EEE; width:600px }
-.message-headers dt { clear:left; width:100px; color:#999 }
-.message-headers dd:after { content:""; border-bottom:1px solid #CCC; width:650px; display:block; clear:both; margin:20px 0 0 -100px; padding-top:15px }
-.message-headers dt, .message-headers dd { margin:10px 0; float:left }
-.message-headers .date { float:right; color:#666 }
-textarea { width:450px; height:140px; resize:vertical }
-.messages .profile-signature p { font-size:13px }
-.profile-signature { display:inline !important }
-.messages .delete { color:#339BB9 }
+#message_compose .frm tr th,
+#message_compose .frm tr td { border: none; padding: 0 0 10px; }
+#message_compose .frm tr th { width: 80px; padding-right: 10px; }
+#message_compose .frm label { line-height: 28px; margin: 0; padding: 0; width: 100%; display: block; text-align: right; }
+#message_compose .frm .actions { border: none; padding: none; margin: 0; }
+#message_compose .frm .actions td { background: #F0F0F0; border-top: 1px solid #DDDDDD; padding: 10px 0; }
+#message_compose .frm input[type=text],
+#message_compose .frm textarea { width: 98%; }
