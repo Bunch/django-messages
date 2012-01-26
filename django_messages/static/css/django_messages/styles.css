@@ -1,3 +1,4 @@
+#message_compose .frm { width: 560px; }
 #message_compose .frm tr th,
 #message_compose .frm tr td { border: none; padding: 0 0 10px; }
 #message_compose .frm tr th { width: 80px; padding-right: 10px; }
@@ -6,3 +7,4 @@
 #message_compose .frm .actions td { background: #F0F0F0; border-top: 1px solid #DDDDDD; padding: 10px 0; }
 #message_compose .frm input[type=text],
 #message_compose .frm textarea { width: 98%; }
+#message_compose .frm textarea { height: 120px; }
