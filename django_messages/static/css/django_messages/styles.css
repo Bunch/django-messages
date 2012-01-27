@@ -8,3 +8,13 @@
 #message_compose .frm input[type=text],
 #message_compose .frm textarea { width: 98%; }
 #message_compose .frm textarea { height: 120px; }
+.messages td { padding:5px }
+p.message { font-size:16px; color:#333; line-height:1.5em; padding:20px; margin:20px 0; clear:both; border:2px solid #DDD; background:#EEE; width:600px }
+.message-headers dt { clear:left; width:100px; color:#999 }
+.message-headers dd:after { content:""; border-bottom:1px solid #CCC; width:650px; display:block; clear:both; margin:20px 0 0 -100px; padding-top:15px }
+.message-headers dt, .message-headers dd { margin:10px 0; float:left }
+.message-headers .date { float:right; color:#666 }
+textarea { width:450px; height:140px; resize:vertical }
+.messages .profile-signature p { font-size:13px }
+.profile-signature { display:inline !important }
+.messages .delete { color:#339BB9 }
