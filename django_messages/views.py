@@ -1,4 +1,5 @@
 import datetime
+from django import forms
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -71,6 +72,8 @@ def compose(request, recipient=None, form_class=ComposeForm,
         ``template_name``: the template to use
         ``success_url``: where to redirect after successfull submission
     """
+    recipients = []
+
     if request.method == "POST":
         sender = request.user
         form = form_class(request.POST, recipient_filter=recipient_filter)
@@ -82,10 +85,17 @@ def compose(request, recipient=None, form_class=ComposeForm,
             if request.GET.has_key('next'):
                 success_url = request.GET['next']
             return HttpResponseRedirect(success_url)
+        else:
+            try:
+                recipients = form.fields['recipient'].clean(form.data['recipient'])
+            except forms.ValidationError:
+                recipients = []
+
+            if not recipients:
+                recipients = []
     else:
         form = form_class()
 
-        recipients = None
         if recipient is not None:
             recipients = [u for u in User.objects.filter(pk__in=[r.strip() for r in recipient.split('+')])]
             form.fields['recipient'].initial = recipients
