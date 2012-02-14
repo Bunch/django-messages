@@ -6,6 +6,8 @@ from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
+from facebookdata.models import Interest
+
 class MessageManager(models.Manager):
 
     def inbox_for(self, user):
@@ -51,11 +53,14 @@ class Message(models.Model):
     sender = models.ForeignKey(User, related_name='sent_messages', verbose_name=_("Sender"))
     recipient = models.ForeignKey(User, related_name='received_messages', null=True, blank=True, verbose_name=_("Recipient"))
     parent_msg = models.ForeignKey('self', related_name='next_messages', null=True, blank=True, verbose_name=_("Parent message"))
-    sent_at = models.DateTimeField(_("sent at"), null=True, blank=True)
+    sent_at = models.DateTimeField(_("sent at"), null=True, blank=True, auto_now_add=True)
     read_at = models.DateTimeField(_("read at"), null=True, blank=True)
     replied_at = models.DateTimeField(_("replied at"), null=True, blank=True)
     sender_deleted_at = models.DateTimeField(_("Sender deleted at"), null=True, blank=True)
     recipient_deleted_at = models.DateTimeField(_("Recipient deleted at"), null=True, blank=True)
+
+    # Allow a message to be optionally associated with interest
+    interest = models.ForeignKey(Interest, related_name='+', null=True, blank=True)
     
     objects = MessageManager()
     
