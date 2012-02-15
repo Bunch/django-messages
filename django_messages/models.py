@@ -53,7 +53,7 @@ class Message(models.Model):
     sender = models.ForeignKey(User, related_name='sent_messages', verbose_name=_("Sender"))
     recipient = models.ForeignKey(User, related_name='received_messages', null=True, blank=True, verbose_name=_("Recipient"))
     parent_msg = models.ForeignKey('self', related_name='next_messages', null=True, blank=True, verbose_name=_("Parent message"))
-    sent_at = models.DateTimeField(_("sent at"), null=True, blank=True, auto_now_add=True)
+    sent_at = models.DateTimeField(_("sent at"), null=True, blank=True)
     read_at = models.DateTimeField(_("read at"), null=True, blank=True)
     replied_at = models.DateTimeField(_("replied at"), null=True, blank=True)
     sender_deleted_at = models.DateTimeField(_("Sender deleted at"), null=True, blank=True)
