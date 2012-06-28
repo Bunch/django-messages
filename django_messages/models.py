@@ -6,7 +6,7 @@ from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from facebookdata.models import Interest
+from bunch.facebookdata.models import Interest
 
 class MessageManager(models.Manager):
 
@@ -61,38 +61,38 @@ class Message(models.Model):
 
     # Allow a message to be optionally associated with interest
     interest = models.ForeignKey(Interest, related_name='+', null=True, blank=True)
-    
+
     objects = MessageManager()
-    
+
     def new(self):
         """returns whether the recipient has read the message or not"""
         if self.read_at is not None:
             return False
         return True
-        
+
     def replied(self):
         """returns whether the recipient has written a reply to this message"""
         if self.replied_at is not None:
             return True
         return False
-    
+
     def __unicode__(self):
         return self.subject
-    
+
     def get_absolute_url(self):
         return ('messages_detail', [self.id])
     get_absolute_url = models.permalink(get_absolute_url)
-    
+
     def save(self, **kwargs):
         if not self.id:
             self.sent_at = datetime.datetime.now()
-        super(Message, self).save(**kwargs) 
-    
+        super(Message, self).save(**kwargs)
+
     class Meta:
         ordering = ['-sent_at']
         verbose_name = _("Message")
         verbose_name_plural = _("Messages")
-        
+
 def inbox_count_for(user):
     """
     returns the number of unread messages for the given user but does not
