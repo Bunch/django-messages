@@ -1,56 +1,28 @@
-{% extends "base.html" %}
-{% load i18n %}  
+{% extends "django_messages/base.html" %} 
+{% load i18n %} 
+{% load url from future %}
 
-{% block layout %}container{% endblock %}
-
-{% block content %}
-
-  <div class="container">
-
-    <h1>Sent Messages</h1>
-
-    <div class="row">
-
-      <span class="span2">
-
-        <ul id="messages_nav" class="nav nav-pills nav-stacked">
-          <li><a href="{% url messages_inbox %} "><i class="icon-inbox"></i> {% trans "Inbox" %}</a></li>
-          <li class="active"><a href="{% url messages_outbox %} "><i class="icon-share-alt icon-white"></i> {% trans "Sent" %}</a></li>
-          <li><a href="{% url messages_trash %} "><i class="icon-trash"></i> {% trans "Trash" %}</a></li>
-        </ul>
-
-      </span>
-
-      <span class="span10">
-
-        {% if message_list %} 
-          <table class="messages table table-bordered table-striped">
-            <thead>
-              <tr><th>{% trans "Recipient" %}</th><th>{% trans "Subject" %}</th><th>{% trans "Sent" %}</th><th>{% trans "Action" %}</th></tr>
-            </thead>
-            <tbody>
-            {% for message in message_list %} 
-              <tr>
-                <td>{{ message.recipient.profile.signature }}</td>
-                <td><a href="{{ message.get_absolute_url }}">{{ message.subject }}</a></td>
-                <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-                <td><a href="{% url messages_delete message.id %}?next={% url messages_outbox %}" class="btn btn-small" title="Delete this message"><i class="icon-trash"></i> <span>{% trans "Delete" %}</span></a></td>
-              </tr>
-            {% endfor %}
-            </tbody>
-          </table>
-        {% else %}  
-          <div class="blank well">
-            <h2>You have not sent any messages.</h2>
-            <p>Connect with one of your matches to get things started.</p>
-            <p><a href="{% url matches %}" class="btn btn-primary btn-large">View your matches</a></p>
-          </div>
-        {% endif %}
-
-      </span>
-
-    </div>
-
-  </div>
-
+{% block content %} 
+<h1>{% trans "Sent Messages" %}</h1>
+{% if message_list %} 
+<table class="messages"> 
+    <thead>
+        <tr><th>{% trans "Recipient" %}</th><th>{% trans "Subject" %}</th><th>{% trans "Sent" %}</th><th>{% trans "Action" %}</th></tr>
+    </thead>
+    <tbody>
+{% for message in message_list %} 
+    <tr>
+        <td>{{ message.recipient }}</td>
+        <td>
+        <a href="{{ message.get_absolute_url }}">{{ message.subject }}</a>
+        </td>
+        <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+        <td><a href="{% url 'messages_delete' message.id %}?next={% url 'messages_outbox' %}">{% trans "delete" %}</a></td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>{% trans "No messages." %}</p>
+{% endif %}   
 {% endblock %}

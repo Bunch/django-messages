@@ -5,20 +5,22 @@ by sopelkin
 
 from django import forms
 from django.forms import widgets
-from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.utils.encoding import force_unicode
+from django_messages.utils import get_user_model
+
+User = get_user_model()
+
 
 class CommaSeparatedUserInput(widgets.HiddenInput):
-
     def render(self, name, value, attrs=None):
         if value is None:
             value = ''
         elif isinstance(value, (list, tuple)):
             value = (', '.join([str(user.pk) for user in value]))
         return super(CommaSeparatedUserInput, self).render(name, value, attrs)
+
 
 class CommaSeparatedUserField(forms.Field):
     widget = CommaSeparatedUserInput
@@ -46,7 +48,7 @@ class CommaSeparatedUserField(forms.Field):
             for r in users:
                 if recipient_filter(r) is False:
                     users.remove(r)
-                    invalid_users.append(r.gk)
+                    invalid_users.append(r.pk)
         
         if unknown_ids or invalid_users:
             incorrect = [str(uid) for uid in list(unknown_ids)+invalid_users]

@@ -4,17 +4,17 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import ugettext as _
-from django.utils.translation import ugettext_noop
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
 from django_messages.models import Message
 from django_messages.forms import ComposeForm
-from django_messages.utils import format_quote
+from django_messages.utils import format_quote, get_user_model, get_username_field
+
+User = get_user_model()
 
 if "notification" in settings.INSTALLED_APPS:
     from notification import models as notification

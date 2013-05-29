@@ -1,63 +1,31 @@
-{% extends "base.html" %}
-{% load i18n %}  
-
-{% block layout %}container{% endblock %}
+{% extends "django_messages/base.html" %} 
+{% load i18n %} 
+{% load url from future %}
 
 {% block content %}
-
-  <div class="container">
-
-    <h1>Inbox</h1>
-
-    <div class="row">
-
-      <span class="span2">
-
-        <ul id="messages_nav" class="nav nav-pills nav-stacked">
-          <li class="active"><a href="{% url messages_inbox %} "><i class="icon-inbox icon-white"></i> {% trans "Inbox" %}</a></li>
-          <li><a href="{% url messages_outbox %} "><i class="icon-share-alt"></i> {% trans "Sent" %}</a></li>
-          <li><a href="{% url messages_trash %} "><i class="icon-trash"></i> {% trans "Trash" %}</a></li>
-        </ul>
-
-      </span>
-
-      <span class="span10">
-
-        {% if message_list %} 
-          <table class="messages table table-bordered table-striped">
-            <thead>
-              <tr><th>{% trans "Sender" %}</th><th>{% trans "Subject" %}</th><th>{% trans "Received" %}</th><th>{% trans "Action" %}</th></tr>
-            </thead>
-            <tbody>
-              {% for message in message_list %} 
-                <tr>
-                  <td>{{ message.sender.profile.signature_text_only }}</td>
-                  <td>
-                    {% if message.new %}</strong><span class="label label-success">New</span>{% endif %}
-                    {% if message.new %}<strong>{% endif %}
-                    {% if message.replied %}<em>{% endif %}
-                    <a href="{{message.get_absolute_url }}" class="subject">{{ message.subject }}</a>
-                    {% if message.replied %}</em>{% endif %}
-                  </td>
-                  <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
-                  <td><a href="{% url messages_delete message.id %}" class="btn btn-small delete" title="Delete this message"><i class="icon-trash"></i> <span>{% trans "Delete" %}</span></a></td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        {% else %}  
-          <div class="blank well">
-            <h2>Your inbox is empty.</h2>
-            <p>It's a little too quiet in here.</p>
-            <p>Connect with one of your matches to get things started.</p>
-            <p><a href="{% url matches %}" class="btn btn-primary btn-large">View your matches</a></p>
-          </div>
-        {% endif %}
-
-      </span>
-
-    </div>
-
-  </div>
-
+<h1>{% trans "Inbox" %}</h1>
+{% if message_list %} 
+<table class="messages">
+    <thead>
+        <tr><th>{% trans "Sender" %}</th><th>{% trans "Subject" %}</th><th>{% trans "Received" %}</th><th>{% trans "Action" %}</th></tr>
+    </thead>
+    <tbody>
+{% for message in message_list %} 
+    <tr>
+        <td>{{ message.sender }}</td>
+        <td>
+            {% if message.new %}<strong>{% endif %}
+            {% if message.replied %}<em>{% endif %}
+            <a href="{{message.get_absolute_url }}">{{ message.subject }}</a>
+            {% if message.replied %}</em>{% endif %}
+            {% if message.new %}</strong>{% endif %}</td>
+        <td>{{ message.sent_at|date:_("DATETIME_FORMAT") }}</td>
+        <td><a href="{% url 'messages_delete' message.id %}">{% trans "delete" %}</a></td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>{% trans "No messages." %}</p>
+{% endif %}  
 {% endblock %}

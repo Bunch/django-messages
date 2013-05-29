@@ -1,55 +1,23 @@
-{% extends "base.html" %}
-{% load i18n %}  
-
-{% block layout %}container{% endblock %}
+{% extends "django_messages/base.html" %} 
+{% load i18n %} 
+{% load url from future %}
 
 {% block content %}
+<h1>{% trans "View Message" %}</h1>
+<dl class="message-headers">
+    <dt>{% trans "Subject" %}</dt>
+    <dd><strong>{{ message.subject }}</strong></dd>
+    <dt>{% trans "Sender" %}</dt>
+    <dd>{{ message.sender }}</dd>
+    <dt>{% trans "Date" %} </dt>
+    <dd>{{ message.sent_at|date:_("DATETIME_FORMAT")}}</dd>
+    <dt>{% trans "Recipient" %}</dt>
+    <dd>{{ message.recipient }}</dd>
+</dl>
+{{ message.body|linebreaksbr }}<br /><br />
 
-  <div class="container">
-
-    <div class="row">
-
-      <span class="span8 offset2">
-
-        <h1>{% trans "View Message" %}</h1>
-
-        <div class="message pin">
-
-          <div class="header">
-            <h2>{{ message.subject }}</h2>
-            <ul class="info">
-              <li>
-                <label>From:</label>
-                {{ message.sender.profile.signature }}
-              </li>
-              <li>
-                <label>To:</label>
-                {{ message.recipient.profile.signature }}
-              </li>
-              <li class="sent">
-                {{ message.sent_at|date:_("DATETIME_FORMAT")}}
-              </li>
-            </ul>
-          </div>
-
-          <div class="body">
-            {{ message.body|linebreaksbr }}
-          </div>
-
-          <div class="footer">
-            <a href="{% url messages_delete message.id %}" class="delete btn" title="Delete this message"><i class="icon-trash"></i> <span>{% trans "Delete" %}</span></a>
-            {% ifequal message.recipient.pk user.pk %}
-              <a href="{% url messages_reply message.id %}" class="reply btn btn-primary">{% trans "Reply" %}</a>
-            {% endifequal %}
-            <a href="{% url messages_inbox %}" class="back btn">{% trans "Back to Messages" %}</a>
-          </div>
-
-        </div>
-
-      </span>
-
-    </div>
-
-  </div>
-
+{% ifequal message.recipient.pk user.pk %}
+<a href="{% url 'messages_reply' message.id %}">{% trans "Reply" %}</a>
+{% endifequal %}
+<a href="{% url 'messages_delete' message.id %}">{% trans "Delete" %}</a>
 {% endblock %}
